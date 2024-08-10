@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import Account from "./pages/Account";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
+import AsfarUsers from "./pages/AsfarUsers";
 
 const router = createBrowserRouter(
   createRoutesFromChildren(
@@ -25,6 +26,7 @@ const router = createBrowserRouter(
       <Route path="users" element={<Users />} />
       <Route path="settings" element={<Settings />} />
       <Route path="account" element={<Account />} />
+      <Route path="asfarusers" element={<AsfarUsers />} />
       <Route path="login" element={<Login />} />
       <Route path="*" element={<PageNotFound />} />
     </Route>

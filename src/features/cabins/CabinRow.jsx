@@ -1,11 +1,12 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import styled from "styled-components";
-
 const TableRow = styled.div`
   display: grid;
   grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
   column-gap: 2.4rem;
   align-items: center;
-  padding: 1.4rem 2.4rem;
+  padding: 2.4rem 2.4rem 2.4rem 3.5rem;
 
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
@@ -38,3 +39,27 @@ const Discount = styled.div`
   font-weight: 500;
   color: var(--color-green-700);
 `;
+
+const CurrencyFormat = function (number) {
+  return new Intl.NumberFormat("en-ae", {
+    style: "currency",
+    currency: "USD",
+  }).format(number);
+};
+
+function CabinRow({ cabin }) {
+  console.log(cabin);
+  const { image, name, maxCapacity, regularPrice, discount } = cabin;
+  return (
+    <TableRow role="row">
+      <Img src={image} />
+      <Cabin>{name}</Cabin>
+      <div>Up to {maxCapacity} pax</div>
+      <Price>{CurrencyFormat(regularPrice)}</Price>
+      <Discount>{CurrencyFormat(discount)}</Discount>
+      <button>Delete</button>
+    </TableRow>
+  );
+}
+
+export default CabinRow;
