@@ -13,6 +13,7 @@ const Applayout = styled.main`
 const Main = styled.main`
   background-color: var(--color-grey-200);
   padding: 4rem 4.8rem 6.4rem;
+  height: 200dvh;
 `;
 
 // const Spinner = styled.div`
