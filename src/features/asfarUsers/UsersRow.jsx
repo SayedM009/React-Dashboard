@@ -5,6 +5,9 @@ import { PiDotsThreeOutlineVertical } from "react-icons/pi";
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updatingAsfarUserStatus } from "../../services/apiAsfarUsers";
+import toast from "react-hot-toast";
 
 const Img = styled.img`
   display: block;
@@ -99,6 +102,15 @@ function CabinRow({ user, bg, index, active, setActive }) {
     actions,
     number,
   } = user;
+  const queryClient = useQueryClient();
+  // const mutate = useMutation({
+  const { isLoading: isChanging, mutate: changeStatus } = useMutation({
+    mutationFn: updatingAsfarUserStatus,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["Asfar_Users"]);
+      toast.success(`Status of ${userName} has changed `);
+    },
+  });
 
   function actionController() {
     setActive(active === null ? index : active === index ? null : index);
@@ -110,7 +122,7 @@ function CabinRow({ user, bg, index, active, setActive }) {
         <Img src={logo} />
       </TableCell>
       <TableCell>{id}</TableCell>
-      <TableCell>{userName.slice(0, userName.indexOf(" "))}</TableCell>
+      <TableCell>{userName}</TableCell>
       <TableCell>{branchName}</TableCell>
       <TableCell>
         <p>{email}</p>
@@ -122,7 +134,15 @@ function CabinRow({ user, bg, index, active, setActive }) {
       <TableCell>{formatCurrency(monthlySales)}</TableCell>
       <TableCell>{formatCurrency(total)}</TableCell>
       <TableCell>
-        <select name="" id="" defaultValue={status}>
+        <select
+          name="status"
+          id="status"
+          defaultValue={status}
+          disabled={isChanging}
+          onChange={(e) => {
+            changeStatus({ ...user, status: e.target.value });
+          }}
+        >
           <option value="true">Active</option>
           <option value="false">De-Active</option>
         </select>

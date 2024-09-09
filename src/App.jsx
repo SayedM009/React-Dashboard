@@ -16,7 +16,9 @@ import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import AsfarUsers from "./pages/AsfarUsers";
 import Action from "./pages/Action";
-
+import EditCabin, {
+  loader as editCabinLoader,
+} from "./features/cabins/EditCabin";
 const router = createBrowserRouter(
   createRoutesFromChildren(
     <Route element={<Applayout />}>
@@ -24,6 +26,11 @@ const router = createBrowserRouter(
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="bookings" element={<Bookings />} />
       <Route path="cabins" element={<Cabins />} />
+      <Route
+        path="cabins/editCabin"
+        loader={editCabinLoader}
+        element={<EditCabin />}
+      />
       <Route path="users" element={<Users />} />
       <Route path="settings" element={<Settings />} />
       <Route path="account" element={<Account />} />

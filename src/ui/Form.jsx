@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 const Form = styled.form`
+  position: relative;
   ${(props) =>
     props.type !== "modal" &&
     css`

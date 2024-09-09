@@ -1,63 +1,117 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import styled from "styled-components";
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 2.4rem 2.4rem 2.4rem 3.5rem;
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`;
+import {
+  HiEllipsisVertical,
+  HiMiniPencilSquare,
+  HiOutlineTrash,
+  HiOutlineDocumentDuplicate,
+} from "react-icons/hi2";
 
-const Img = styled.img`
-  display: block;
-  width: 6.4rem;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  object-position: center;
-  transform: scale(1.5) translateX(-7px);
-`;
+import Button from "../../ui/Button";
+import useDeleteCabin from "./useDeleteCabin";
+import {
+  Cabin,
+  Discount,
+  Img,
+  Li,
+  Price,
+  TableRow,
+  Ul,
+} from "./cabinRowAppearance";
 
-const Cabin = styled.div`
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  font-family: "Sono";
-`;
+import { formatCurrency } from "../../utils/helpers";
+import useCreateCabins from "./useCreateCabins";
 
-const Price = styled.div`
-  font-family: "Sono";
-  font-weight: 600;
-`;
-
-const Discount = styled.div`
-  font-family: "Sono";
-  font-weight: 500;
-  color: var(--color-green-700);
-`;
-
-const CurrencyFormat = function (number) {
-  return new Intl.NumberFormat("en-ae", {
-    style: "currency",
-    currency: "USD",
-  }).format(number);
+const linkStyle = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
 };
 
 function CabinRow({ cabin }) {
-  console.log(cabin);
-  const { image, name, maxCapacity, regularPrice, discount } = cabin;
+  const [isMenuOpen, setIsMenuOpen] = useState(null);
+  const { isDeleting, deleteCabin } = useDeleteCabin();
+  const { isCreating, createCabins } = useCreateCabins();
+
+  const { image, name, maxCapacity, regularPrice, discount, description } =
+    cabin;
+
+  function handleDuplicating() {
+    console.log(image);
+    const DuplicatedCabin = {
+      name: `Copy of ${name}`,
+      maxCapacity,
+      regularPrice,
+      image,
+      discount,
+      description,
+    };
+
+    createCabins(DuplicatedCabin);
+    console.log(image);
+  }
+
   return (
     <TableRow role="row">
       <Img src={image} />
       <Cabin>{name}</Cabin>
       <div>Up to {maxCapacity} pax</div>
-      <Price>{CurrencyFormat(regularPrice)}</Price>
-      <Discount>{CurrencyFormat(discount)}</Discount>
-      <button>Delete</button>
+      <Price>{formatCurrency(regularPrice)}</Price>
+      <Discount>{formatCurrency(discount)}</Discount>
+
+      <HiEllipsisVertical
+        style={{ fontSize: "30px", cursor: "pointer" }}
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      />
+
+      <Ul
+        movement={isMenuOpen != null ? (isMenuOpen ? "comeIn" : "goOut") : ""}
+      >
+        <Li>
+          <Button
+            size="small"
+            disabled={isDeleting}
+            onClick={() => deleteCabin(cabin)}
+            style={{
+              width: "100%",
+              opacity: `${isDeleting ? ".5" : "1"}`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <HiOutlineTrash />
+            <span style={{ fontSize: "10px" }}>Delete</span>
+          </Button>
+        </Li>
+        <Li>
+          <Button size="small" style={{ width: "100%" }}>
+            <Link
+              style={linkStyle}
+              to={`editCabin?cabin=${JSON.stringify(cabin)}`}
+              relative
+            >
+              <HiMiniPencilSquare />
+              <span style={{ fontSize: "10px" }}>Edit</span>
+            </Link>
+          </Button>
+        </Li>
+        <Li>
+          <Button
+            size="small"
+            style={{ width: "100%" }}
+            disabled={isCreating}
+            onClick={handleDuplicating}
+          >
+            <Link style={linkStyle}>
+              <HiOutlineDocumentDuplicate />
+              <span style={{ fontSize: "10px" }}>Duplicate</span>
+            </Link>
+          </Button>
+        </Li>
+      </Ul>
     </TableRow>
   );
 }

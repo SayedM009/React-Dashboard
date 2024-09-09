@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 const Row = styled.div`
-  ${(props) => [
-    props.type === "center"
-      ? `justify-content: center;`
-      : "justify-content: space-between;",
-  ]}
   display: flex;
-  align-items: center;
-  margin: auto;
+  width: 100%;
+  ${(props) => [
+    props.type === "vertical"
+      ? `flex-direction: column; justify-content: center; gap:2rem`
+      : "justify-content: space-between; align-items: center;",
+  ]}
 `;
 
 export default Row;

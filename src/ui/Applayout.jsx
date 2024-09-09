@@ -13,7 +13,8 @@ const Applayout = styled.main`
 const Main = styled.main`
   background-color: var(--color-grey-200);
   padding: 4rem 4.8rem 6.4rem;
-  height: 200dvh;
+  height: 90dvh;
+  overflow-y: scroll;
 `;
 
 // const Spinner = styled.div`
